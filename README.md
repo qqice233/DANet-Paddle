@@ -107,7 +107,7 @@ python train_dygraph.py --backbone resnet101 --batch_size 2 --lr 0.003 --lr_sche
 
 ```
 #### 【注】
-##### train.py使用executor方式训练（适合paddle1.5.2），train_dygraph.py使用动态图方式训练（适合paddle1.6.0），两种方式都可以
+##### train_executor.py使用executor方式训练（适合paddle1.5.2），train_dygraph.py使用动态图方式训练（适合paddle1.6.0），两种方式都可以
 ##### 在训练阶段，验证的结果不是真实的，需要使用eval.py来获得验证的最终结果。
  
  ## 模型验证
