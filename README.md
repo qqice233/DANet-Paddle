@@ -144,24 +144,3 @@ python eval.py --backbone resnet101 --load_better_model True --batch_size 1 --cr
 ![val_output](img/val_output.png)
 ###### DANet101模型输出
 
-
-
-#### Paddle缺的op:
-    1、Dropout2d: 随机将某个通道的所有值置0。
-        解决办法：小op拼接，先用layers.one申请大小为[batch_size, channel]的tensor，做dropout之后和需要Dropout2d的tensor做乘法。
-           ones = fluid.layers.ones(shape=[batch_size, channel], dtype=’float32’) 
-           dropout1d = fluid.layers.dropout(ones2, 0.1)
-           drop2d = fluid.layers.elementwise_mul(tensor, dropout1d, axis=0)
-
-#### Paddle有bug的op:
-    1、softmax_with_cross_entropy：计算loss不稳定，可能出现NaN情况。
-       解决方式：拆开运算
-           pred = fluid.layers.softmax(pred, use_cudnn=False)
-           loss = fluid.layers.cross_entropy(pred, label, ignore_index=255)
-    
-    2、设置syncBN=True, 在多卡训练时会出现有些卡没有数据的情况，导致训练进入假死状态
-       解决方式：每个epoch加载的数据量，需要可以被当前显卡数量整除
-
-## 版本更新
-
-2019/11/08 支持paddle 1.6.0
